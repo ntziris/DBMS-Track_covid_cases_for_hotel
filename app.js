@@ -1,12 +1,15 @@
 const express = require("express");
+const path = require("path");
 const mysql = require("mysql");
 const dotenv = require("dotenv");
 
+// Configure dotenv
 dotenv.config({ path: './.env' });
 
+// Express
 const app = express();
 
-// Start DB
+// Configure DB
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
@@ -14,6 +17,15 @@ const db = mysql.createConnection({
   database: process.env.DATABASE,
 });
 
+
+// Configure public Directory
+const publicDirectory = path.join(__dirname, './public');
+app.use(express.static(publicDirectory));
+
+// Template engine - handlebars
+app.set('view engine', 'hbs')
+
+// Connect to DB
 db.connect((error) => {
   if (error) {
     console.log(error);
@@ -23,7 +35,8 @@ db.connect((error) => {
 })
 
 app.get("/", (req, res) => {
-  res.send("<h1>Home Page!</h1>");
+  // res.send("<h1>Home Page!</h1>");
+  res.render("index")
 });
 
 app.listen(5000, () => {

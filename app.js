@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const mysql = require("mysql");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 
 // Configure dotenv
 dotenv.config({ path: './.env' });
@@ -24,7 +25,12 @@ app.use(express.static(publicDirectory));
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: false }));
+
+// Parse JSON bodies (as send by API clients)
 app.use(express.json());
+
+// Initialize cookie parser
+app.use(cookieParser());
 
 // Template engine - handlebars
 app.set('view engine', 'hbs')
